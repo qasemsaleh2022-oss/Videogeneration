@@ -1,608 +1,334 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>مولّد الفيديو السينمائي الذكي - HF Token</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Eruda for mobile diagnostics -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
-    <style>
-        body {
-            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        .glass {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-        }
-        .glass-hover:hover {
-            background: rgba(51, 65, 85, 0.7);
-            border-color: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-        }
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .drop-zone {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .drop-zone:hover, .drop-zone.dragover {
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.1);
-        }
-        .progress-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            border-radius: 9999px;
-            transition: width 0.5s ease;
-        }
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .toast.show {
-            opacity: 1;
-        }
-        .remove-image-btn {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .remove-image-btn:hover {
-            background: #ef4444;
-        }
-        .preview-container {
-            position: relative;
-            max-width: 100%;
-            margin-top: 0.5rem;
-        }
-        .preview-container img {
-            max-height: 140px;
-            max-width: 100%;
-            border-radius: 0.5rem;
-        }
-        /* modal styles */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            max-width: 90%;
-            width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استوديوهات الذكاء الاصطناعي - مولد الفيديو السينمائي</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Cairo -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Eruda for Mobile Debugging -->
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init();</script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #0b0f19;
+      color: #f1f5f9;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .gradient-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    }
+    .gradient-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .gradient-btn:disabled {
+      background: #374151;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-slate-900 text-slate-200">
-    <div class="container mx-auto px-4 py-6 max-w-4xl">
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold bg-gradient-to-l from-indigo-400 to-purple-500 bg-clip-text text-transparent">
-                <i class="fas fa-film ml-2"></i> مولّد الفيديو الذكي (مجاني)
-            </h1>
-            <button class="btn-secondary" id="settingsBtn">
-                <i class="fas fa-cog ml-2"></i> الإعدادات
-            </button>
-        </header>
+<body class="min-h-screen pb-12 flex flex-col items-center">
 
-        <!-- الفكرة الأساسية -->
-        <section class="glass p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-3"><i class="fas fa-lightbulb ml-2 text-yellow-400"></i> وصف المشهد / الحركة</h2>
-            <textarea id="scenePrompt" rows="3" placeholder="اكتب وصف المشهد بالعربية أو الإنجليزية... مثال: امرأة تبتسم بحزن وتتحرك عيناها ببطء مع خلفية متحركة" class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl p-3 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-            <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle ml-1"></i> يدعم الكتابة العربية الكاملة بدون مفاتيح API</p>
-        </section>
+  <!-- Header -->
+  <header class="w-full max-w-4xl p-4 text-center border-b border-gray-800 mb-6">
+    <h1 class="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500">
+      🎬 المنصة السينمائية لتوليد الفيديو (النسخة المستقرة)
+    </h1>
+    <p class="text-xs text-gray-400 mt-2">توليد فيديو احترافي من الصور مع نظام التناوب الذكي بين السيرفرات</p>
+  </header>
 
-        <!-- الصور المرجعية -->
-        <section class="glass p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-3"><i class="fas fa-images ml-2 text-blue-400"></i> صور التحكم (First & Last Frame)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- First Frame -->
-                <div>
-                    <label class="block mb-2 font-medium">صورة البداية (First Frame)</label>
-                    <div id="firstFrameDropZone" class="drop-zone">
-                        <div id="firstFramePlaceholder">
-                            <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i>
-                            <p class="text-sm text-slate-400">انقر أو اسحب صورة هنا</p>
-                        </div>
-                        <div id="firstFramePreviewContainer" class="preview-container hidden">
-                            <img id="firstFramePreview" class="rounded-lg" alt="First Frame Preview" />
-                            <button class="remove-image-btn" id="removeFirstFrame" type="button" title="إزالة الصورة">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <input type="file" id="firstFrameInput" accept="image/*" class="hidden" />
-                </div>
-                <!-- Last Frame -->
-                <div>
-                    <label class="block mb-2 font-medium">صورة النهاية / الوجه المستهدف (Last Frame)</label>
-                    <div id="lastFrameDropZone" class="drop-zone">
-                        <div id="lastFramePlaceholder">
-                            <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i>
-                            <p class="text-sm text-slate-400">انقر أو اسحب صورة هنا</p>
-                        </div>
-                        <div id="lastFramePreviewContainer" class="preview-container hidden">
-                            <img id="lastFramePreview" class="rounded-lg" alt="Last Frame Preview" />
-                            <button class="remove-image-btn" id="removeLastFrame" type="button" title="إزالة الصورة">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <input type="file" id="lastFrameInput" accept="image/*" class="hidden" />
-                </div>
-            </div>
-            <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle ml-1"></i> إذا رُفعت صورة البداية فقط، يتم توليد فيديو منها. صورة النهاية اختيارية لتحسين الاتساق.</p>
-        </section>
+  <main class="w-full max-w-3xl px-4 space-y-6">
 
-        <!-- المدة الزمنية -->
-        <section class="glass p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-3"><i class="fas fa-clock ml-2 text-green-400"></i> مدة الفيديو</h2>
-            <div class="flex flex-wrap gap-3">
-                <button class="btn-secondary duration-btn" data-duration="5">5 ثوانٍ</button>
-                <button class="btn-secondary duration-btn" data-duration="10">10 ثوانٍ</button>
-                <button class="btn-secondary duration-btn" data-duration="15">15 ثانية</button>
-            </div>
-            <p id="durationInfo" class="mt-2 text-sm text-slate-400">المدة المختارة: <span class="font-bold text-white">5 ثوانٍ</span></p>
-        </section>
-
-        <!-- زر التوليد -->
-        <div class="flex justify-center mb-6">
-            <button id="generateBtn" class="btn-primary text-lg px-8 py-3 flex items-center gap-2">
-                <i class="fas fa-play-circle"></i>
-                <span id="generateBtnText">توليد الفيديو</span>
-            </button>
-        </div>
-
-        <!-- منطقة التقدم والنتيجة -->
-        <section class="glass p-6 mb-6 hidden" id="progressSection">
-            <h2 class="text-xl font-semibold mb-3"><i class="fas fa-chart-line ml-2 text-purple-400"></i> التقدم</h2>
-            <div id="progressContainer" class="space-y-3"></div>
-        </section>
-
-        <section class="glass p-6 hidden" id="resultSection">
-            <h2 class="text-xl font-semibold mb-3"><i class="fas fa-video ml-2 text-red-400"></i> الفيديو الناتج</h2>
-            <div class="aspect-video bg-black rounded-xl overflow-hidden">
-                <video id="resultVideo" controls autoplay class="w-full h-full"></video>
-            </div>
-            <div class="flex justify-center mt-4">
-                <a id="downloadLink" class="btn-secondary" download>
-                    <i class="fas fa-download ml-2"></i> تحميل الفيديو
-                </a>
-            </div>
-        </section>
+    <!-- Step 1: Token Configuration -->
+    <div class="glass-card rounded-2xl p-5 shadow-xl border border-indigo-500/30">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm md:text-base font-bold text-indigo-300 flex items-center gap-2">
+          🔑 مفتاح التوثيق (Hugging Face Access Token)
+        </h2>
+        <span id="tokenStatus" class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          ⚠️ غير متصل
+        </span>
+      </div>
+      <p class="text-xs text-gray-400 mb-3">ألصق توكن `hf_...` الخاص بك هنا لتسريع المعالجة وتجاوز طوابير الانتظار:</p>
+      <div class="flex gap-2">
+        <input type="password" id="hfTokenInput" placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxx"
+          class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2 text-xs md:text-sm text-gray-200 focus:outline-none focus:border-indigo-500 dir-ltr text-left">
+        <button onclick="saveToken()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+          حفظ المفتاح
+        </button>
+      </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 class="text-xl font-bold mb-4">الإعدادات</h3>
-            <div class="mb-4">
-                <label class="block mb-2">Hugging Face Access Token (اختياري)</label>
-                <input type="password" id="hfTokenInput" class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl p-3 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="hf_..." />
-                <p class="text-xs text-slate-400 mt-1">أدخل التوكن للحصول على أولوية في الطابور وتقليل الأخطاء.</p>
-            </div>
-            <div class="flex justify-end gap-2">
-                <button class="btn-secondary" id="closeSettingsBtn">إلغاء</button>
-                <button class="btn-primary" id="saveSettingsBtn">حفظ</button>
-            </div>
-        </div>
+    <!-- Engine Selection -->
+    <div class="glass-card rounded-2xl p-5 shadow-xl">
+      <h2 class="text-sm md:text-base font-bold text-purple-300 mb-2">⚙️ محرك التوليد (Server Engine)</h2>
+      <select id="engineSelect" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs md:text-sm text-gray-200 focus:outline-none focus:border-purple-500">
+        <option value="auto">🔄 وضع التناوب التلقائي (يجرب جميع السيرفرات تلقائياً حتى النجاح)</option>
+        <option value="Wan-Video/Wan2.1">1️⃣ Wan2.1 Image-to-Video (أعلى جودة سينمائية)</option>
+        <option value="fffiloni/LTX-Video">2️⃣ LTX-Video Fast (سريع جداً للإنتاج)</option>
+        <option value="KwaiVGI/LivePortrait">3️⃣ LivePortrait (مخصص لتحريك الوجه والشفايف)</option>
+      </select>
     </div>
 
-    <!-- Error Modal -->
-    <div id="errorModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 class="text-xl font-bold mb-4 text-red-400"><i class="fas fa-exclamation-triangle ml-2"></i> خطأ في التوليد</h3>
-            <div id="errorMessageContent" class="text-sm bg-slate-800/50 p-3 rounded-lg overflow-y-auto max-h-60"></div>
-            <div class="flex justify-end mt-4">
-                <button class="btn-secondary" id="closeErrorBtn">إغلاق</button>
-            </div>
+    <!-- Image Upload & Prompt Section -->
+    <div class="glass-card rounded-2xl p-5 shadow-xl space-y-4">
+      <h2 class="text-sm md:text-base font-bold text-pink-300">🖼️ رفع الصور والوصف</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Start Image -->
+        <div>
+          <label class="block text-xs text-gray-300 mb-2">صورة البداية (مطلوبة) *</label>
+          <input type="file" id="startImgInput" accept="image/*" class="hidden" onchange="handleImageSelect(event, 'startPreview')">
+          <div onclick="document.getElementById('startImgInput').click()" 
+            class="border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-xl p-4 text-center cursor-pointer min-h-[140px] flex flex-col items-center justify-center bg-gray-900/50">
+            <img id="startPreview" class="hidden max-h-32 rounded-lg object-cover mb-2">
+            <span id="startText" class="text-xs text-gray-400">اضغط هنا لاختيار صورة البداية</span>
+          </div>
         </div>
+
+        <!-- End Image -->
+        <div>
+          <label class="block text-xs text-gray-300 mb-2">صورة النهاية (اختيارية)</label>
+          <input type="file" id="endImgInput" accept="image/*" class="hidden" onchange="handleImageSelect(event, 'endPreview')">
+          <div onclick="document.getElementById('endImgInput').click()" 
+            class="border-2 border-dashed border-gray-700 hover:border-pink-500 rounded-xl p-4 text-center cursor-pointer min-h-[140px] flex flex-col items-center justify-center bg-gray-900/50">
+            <img id="endPreview" class="hidden max-h-32 rounded-lg object-cover mb-2">
+            <span id="endText" class="text-xs text-gray-400">اضغط هنا لاختيار صورة النهاية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prompt Input -->
+      <div>
+        <label class="block text-xs text-gray-300 mb-2">الوصف النصي (Prompt)</label>
+        <textarea id="promptInput" rows="3" placeholder="أدخل الوصف باللغة الإنجليزية..."
+          class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs md:text-sm text-gray-200 focus:outline-none focus:border-indigo-500"></textarea>
+      </div>
+
+      <!-- Duration -->
+      <div>
+        <label class="block text-xs text-gray-300 mb-2">مدة الفيديو</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setDuration(5)" id="dur5" class="py-2 text-xs rounded-xl border border-indigo-500 bg-indigo-600/30 font-bold text-white">5 ثوانٍ</button>
+          <button onclick="setDuration(10)" id="dur10" class="py-2 text-xs rounded-xl border border-gray-700 bg-gray-900 text-gray-400">10 ثوانٍ</button>
+          <button onclick="setDuration(15)" id="dur15" class="py-2 text-xs rounded-xl border border-gray-700 bg-gray-900 text-gray-400">15 ثانية</button>
+        </div>
+      </div>
+
+      <!-- Generate Button -->
+      <button id="generateBtn" onclick="startGeneration()" class="w-full gradient-btn text-white font-extrabold py-3.5 rounded-xl text-sm md:text-base shadow-lg transition duration-200">
+        🚀 بدء التوليد السينمائي
+      </button>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
+    <!-- Real-time Progress & Terminal -->
+    <div class="glass-card rounded-2xl p-5 shadow-xl space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs md:text-sm font-bold text-gray-300">📊 شاشة المراقبة والتشخيص المباشر</h3>
+        <span id="statusBadge" class="text-xs text-gray-400">جاهز للتوليد</span>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div class="w-full bg-gray-900 rounded-full h-2.5 overflow-hidden">
+        <div id="progressBar" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-2.5 rounded-full w-0 transition-all duration-300"></div>
+      </div>
 
-    <script type="module">
-        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+      <!-- Log Output Box -->
+      <div id="consoleLog" class="bg-black/90 rounded-xl p-3 h-36 overflow-y-auto font-mono text-xs text-green-400 dir-ltr text-left border border-gray-800 leading-relaxed">
+        [System Ready] Waiting for input...
+      </div>
+    </div>
 
-        // ---------- المتغيرات ----------
-        let selectedDuration = 5;
-        let firstFrameFile = null;
-        let lastFrameFile = null;
-        let hfToken = localStorage.getItem('hfToken') || '';
+    <!-- Result Video Container -->
+    <div id="resultContainer" class="hidden glass-card rounded-2xl p-5 shadow-xl text-center space-y-4">
+      <h3 class="text-base font-bold text-green-400">🎉 تم توليد الفيديو بنجاح!</h3>
+      <video id="outputVideo" controls autoplay loop class="w-full max-h-[380px] rounded-xl border border-gray-700 mx-auto"></video>
+      <a id="downloadBtn" download="cinematic_video.mp4" class="inline-block bg-green-600 hover:bg-green-500 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition">
+        ⬇️ تحميل الفيديو
+      </a>
+    </div>
 
-        // DOM elements
-        const firstFrameDropZone = document.getElementById('firstFrameDropZone');
-        const lastFrameDropZone = document.getElementById('lastFrameDropZone');
-        const firstFrameInput = document.getElementById('firstFrameInput');
-        const lastFrameInput = document.getElementById('lastFrameInput');
-        const firstFramePlaceholder = document.getElementById('firstFramePlaceholder');
-        const lastFramePlaceholder = document.getElementById('lastFramePlaceholder');
-        const firstFramePreviewContainer = document.getElementById('firstFramePreviewContainer');
-        const lastFramePreviewContainer = document.getElementById('lastFramePreviewContainer');
-        const firstFramePreview = document.getElementById('firstFramePreview');
-        const lastFramePreview = document.getElementById('lastFramePreview');
-        const removeFirstBtn = document.getElementById('removeFirstFrame');
-        const removeLastBtn = document.getElementById('removeLastFrame');
-        const durationButtons = document.querySelectorAll('.duration-btn');
-        const durationInfo = document.getElementById('durationInfo');
-        const generateBtn = document.getElementById('generateBtn');
-        const generateBtnText = document.getElementById('generateBtnText');
-        const progressSection = document.getElementById('progressSection');
-        const resultSection = document.getElementById('resultSection');
-        const progressContainer = document.getElementById('progressContainer');
-        const resultVideo = document.getElementById('resultVideo');
-        const downloadLink = document.getElementById('downloadLink');
-        const settingsBtn = document.getElementById('settingsBtn');
-        const settingsModal = document.getElementById('settingsModal');
-        const hfTokenInput = document.getElementById('hfTokenInput');
-        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-        const errorModal = document.getElementById('errorModal');
-        const errorMessageContent = document.getElementById('errorMessageContent');
-        const closeErrorBtn = document.getElementById('closeErrorBtn');
+  </main>
 
-        // Toast function
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+  <script type="module">
+    import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@latest/dist/index.js";
+    window.GradioClient = Client;
+  </script>
+
+  <script>
+    let selectedDuration = 5;
+    let startImageFile = null;
+    let endImageFile = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedToken = localStorage.getItem('hf_access_token');
+      if (savedToken) {
+        document.getElementById('hfTokenInput').value = savedToken;
+        updateTokenBadge(true);
+      }
+    });
+
+    function log(msg, type = 'info') {
+      const consoleBox = document.getElementById('consoleLog');
+      const time = new Date().toLocaleTimeString();
+      let color = 'text-green-400';
+      if (type === 'warn') color = 'text-yellow-400';
+      if (type === 'error') color = 'text-red-400';
+      
+      consoleBox.innerHTML += `<div class="${color}">[${time}] ${msg}</div>`;
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+      document.getElementById('statusBadge').innerText = msg;
+    }
+
+    function saveToken() {
+      const token = document.getElementById('hfTokenInput').value.trim();
+      if (!token || !token.startsWith('hf_')) {
+        alert('الرجاء إدخال توكن صحيح المبتدئ بـ hf_');
+        return;
+      }
+      localStorage.setItem('hf_access_token', token);
+      updateTokenBadge(true);
+      alert('تم حفظ مفتاح التوثيق بنجاح!');
+      log("تم حفظ مفتاح التوثيق بنجاح.");
+    }
+
+    function updateTokenBadge(isSet) {
+      const badge = document.getElementById('tokenStatus');
+      if (isSet) {
+        badge.className = "text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+        badge.innerText = "✅ التوكن مفعل ومحفوظ";
+      }
+    }
+
+    function setDuration(dur) {
+      selectedDuration = dur;
+      [5, 10, 15].forEach(d => {
+        const btn = document.getElementById(`dur${d}`);
+        if (d === dur) {
+          btn.className = "py-2 text-xs rounded-xl border border-indigo-500 bg-indigo-600/30 font-bold text-white";
+        } else {
+          btn.className = "py-2 text-xs rounded-xl border border-gray-700 bg-gray-900 text-gray-400";
         }
+      });
+    }
 
-        // Error modal
-        function showError(message) {
-            errorMessageContent.textContent = message;
-            errorModal.classList.remove('hidden');
-        }
-        closeErrorBtn.addEventListener('click', () => errorModal.classList.add('hidden'));
+    function handleImageSelect(event, previewId) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-        // Settings modal
-        settingsBtn.addEventListener('click', () => {
-            hfTokenInput.value = hfToken;
-            settingsModal.classList.remove('hidden');
-        });
-        closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
-        saveSettingsBtn.addEventListener('click', () => {
-            hfToken = hfTokenInput.value.trim();
-            localStorage.setItem('hfToken', hfToken);
-            settingsModal.classList.add('hidden');
-            showToast('تم حفظ التوكن');
-        });
+      if (previewId === 'startPreview') startImageFile = file;
+      if (previewId === 'endPreview') endImageFile = file;
 
-        // ---------- إدارة الصور ----------
-        function setupDropZone(dropZone, input, previewContainer, placeholder, previewImg, removeBtn, type) {
-            dropZone.addEventListener('click', (e) => {
-                if (e.target.closest('.remove-image-btn')) return;
-                input.click();
-            });
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById(previewId);
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+        const textId = previewId === 'startPreview' ? 'startText' : 'endText';
+        document.getElementById(textId).classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
 
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('dragover');
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    handleFile(file, type, placeholder, previewContainer, previewImg);
-                } else {
-                    showError('الرجاء اختيار ملف صورة صالح');
-                }
-            });
+    async function startGeneration() {
+      if (!startImageFile) {
+        alert("يرجى اختيار صورة البداية أولاً!");
+        return;
+      }
 
-            input.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    handleFile(file, type, placeholder, previewContainer, previewImg);
-                }
-                input.value = '';
-            });
+      const prompt = document.getElementById('promptInput').value.trim() || "A cinematic realistic 5-second video, smooth movement";
+      const token = localStorage.getItem('hf_access_token');
+      const btn = document.getElementById('generateBtn');
+      const progressBar = document.getElementById('progressBar');
+      
+      btn.disabled = true;
+      progressBar.style.width = '15%';
+      document.getElementById('resultContainer').classList.add('hidden');
 
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                removeImage(type);
-            });
-        }
+      log("🚀 بدء عملية التوليد...");
 
-        function handleFile(file, type, placeholder, previewContainer, previewImg) {
-            if (!file.type.startsWith('image/')) {
-                showError('الرجاء اختيار ملف صورة صالح');
-                return;
+      const engines = [
+        "Wan-Video/Wan2.1",
+        "fffiloni/LTX-Video",
+        "KwaiVGI/LivePortrait"
+      ];
+
+      const selectedEngine = document.getElementById('engineSelect').value;
+      const targetEngines = selectedEngine === 'auto' ? engines : [selectedEngine];
+
+      let success = false;
+
+      for (let i = 0; i < targetEngines.length; i++) {
+        const spaceName = targetEngines[i];
+        log(`📡 الاتصال بالسيرفر (${i + 1}/${targetEngines.length}): ${spaceName}...`);
+        progressBar.style.width = `${35 + (i * 25)}%`;
+
+        try {
+          if (!window.GradioClient) {
+            throw new Error("جاري تحميل مكتبة الاتصال... أعد الضغط بعد ثوانٍ.");
+          }
+
+          const options = token ? { hf_token: token } : {};
+          const client = await window.GradioClient.connect(spaceName, options);
+
+          log(`⚙️ السيرفر متصل! جاري المعالجة...`);
+          progressBar.style.width = '75%';
+
+          const result = await client.predict("/generate", {
+            prompt: prompt,
+            image: startImageFile,
+          }).catch(async () => {
+            return await client.predict(0, [
+              startImageFile,
+              prompt,
+              selectedDuration
+            ]);
+          });
+
+          if (result && result.data) {
+            const videoData = result.data[0];
+            const videoUrl = typeof videoData === 'string' ? videoData : (videoData.url || videoData.path);
+            
+            if (videoUrl) {
+              displayResult(videoUrl);
+              success = true;
+              log("✅ تم توليد الفيديو بنجاح!", "info");
+              progressBar.style.width = '100%';
+              break;
             }
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (type === 'first') {
-                    firstFrameFile = file;
-                } else {
-                    lastFrameFile = file;
-                }
-                previewImg.src = e.target.result;
-                placeholder.classList.add('hidden');
-                previewContainer.classList.remove('hidden');
-                showToast('تم رفع الصورة بنجاح');
-            };
-            reader.readAsDataURL(file);
+          }
+        } catch (err) {
+          log(`⚠️ السيرفر ${spaceName} مشغول، جاري الانتقال للسيرفر التالي...`, "warn");
         }
+      }
 
-        function removeImage(type) {
-            if (type === 'first') {
-                firstFrameFile = null;
-                firstFramePreviewContainer.classList.add('hidden');
-                firstFramePlaceholder.classList.remove('hidden');
-                firstFramePreview.src = '';
-            } else {
-                lastFrameFile = null;
-                lastFramePreviewContainer.classList.add('hidden');
-                lastFramePlaceholder.classList.remove('hidden');
-                lastFramePreview.src = '';
-            }
-            showToast('تمت إزالة الصورة');
-        }
+      if (!success) {
+        log("❌ جميع السيرفرات المجانية تحت طغط عالٍ حالياً. حاول مجدداً بعد دقيقة.", "error");
+        alert("السيرفرات المجانية مشغولة حالياً بكثافة. تأكد من إضافة التوكن الخاص بك ثم أعِد المحاولة بعد دقيقة.");
+      }
 
-        // ---------- المدة ----------
-        function setDuration(seconds) {
-            selectedDuration = seconds;
-            durationInfo.innerHTML = `المدة المختارة: <span class="font-bold text-white">${seconds} ثوانٍ</span>`;
-            durationButtons.forEach(btn => {
-                btn.classList.remove('bg-indigo-500/30', 'border-indigo-400');
-                if (parseInt(btn.dataset.duration) === seconds) {
-                    btn.classList.add('bg-indigo-500/30', 'border-indigo-400');
-                }
-            });
-        }
+      btn.disabled = false;
+    }
 
-        durationButtons.forEach(btn => {
-            btn.addEventListener('click', () => setDuration(parseInt(btn.dataset.duration)));
-        });
+    function displayResult(videoUrl) {
+      const container = document.getElementById('resultContainer');
+      const video = document.getElementById('outputVideo');
+      const downloadBtn = document.getElementById('downloadBtn');
 
-        // ---------- توليد الفيديو ----------
-        generateBtn.addEventListener('click', async () => {
-            const prompt = document.getElementById('scenePrompt').value.trim();
-            if (!prompt && !firstFrameFile) {
-                showError('يرجى اختيار صورة البداية أو كتابة وصف المشهد أولاً');
-                return;
-            }
-
-            // تعطيل الزر وتغيير النص
-            generateBtn.disabled = true;
-            generateBtnText.innerHTML = '<span class="spinner"></span> ⏳ جاري الاتصال...';
-
-            progressSection.classList.remove('hidden');
-            resultSection.classList.add('hidden');
-            progressContainer.innerHTML = '';
-
-            const progressItem = document.createElement('div');
-            progressItem.innerHTML = `
-                <div class="flex justify-between items-center mb-1">
-                    <span>جارٍ التوليد...</span>
-                    <span class="text-sm text-slate-400">${selectedDuration} ث</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width:5%"></div>
-                </div>
-                <div id="statusText" class="text-xs text-slate-400 mt-1">جاري الاتصال بالخادم...</div>
-            `;
-            progressContainer.appendChild(progressItem);
-            const fill = progressItem.querySelector('.progress-fill');
-            const statusText = progressItem.querySelector('#statusText');
-
-            try {
-                let videoUrl = null;
-
-                if (firstFrameFile) {
-                    statusText.textContent = 'جاري معالجة صورة البداية...';
-                    videoUrl = await generateImageToVideo(firstFrameFile, prompt, selectedDuration, (progress, status) => {
-                        fill.style.width = progress + '%';
-                        statusText.textContent = status;
-                    });
-                } else {
-                    statusText.textContent = 'جاري معالجة النص...';
-                    videoUrl = await generateTextToVideo(prompt, selectedDuration, (progress, status) => {
-                        fill.style.width = progress + '%';
-                        statusText.textContent = status;
-                    });
-                }
-
-                if (videoUrl) {
-                    currentVideoUrl = videoUrl;
-                    resultVideo.src = videoUrl;
-                    downloadLink.href = videoUrl;
-                    resultSection.classList.remove('hidden');
-                    showToast('تم توليد الفيديو بنجاح');
-                } else {
-                    throw new Error('لم يتم الحصول على رابط الفيديو من الخادم');
-                }
-            } catch (error) {
-                console.error('Generation error:', error);
-                showError(`فشل التوليد: ${error.message || 'خطأ غير معروف'}`);
-                fill.style.width = '100%';
-                statusText.textContent = 'فشل';
-            } finally {
-                generateBtn.disabled = false;
-                generateBtnText.innerHTML = 'توليد الفيديو';
-            }
-        });
-
-        async function generateTextToVideo(prompt, duration, onProgress) {
-            const spaces = [
-                { name: "Wan-AI/Wan2.1", fn: "/predict", params: { prompt, negative_prompt: "", duration: duration, seed: Math.floor(Math.random()*100000) } },
-                { name: "THUDM/CogVideoX", fn: "/predict", params: { prompt, num_inference_steps: 25, guidance_scale: 7.0, video_length: duration } }
-            ];
-
-            for (const space of spaces) {
-                try {
-                    onProgress(10, 'جاري الاتصال بالمساحة ' + space.name + '...');
-                    const options = hfToken ? { hf_token: hfToken } : {};
-                    const client = await Client.connect(space.name, options);
-                    onProgress(30, 'تم الاتصال، جاري الإرسال...');
-                    const result = await client.predict(space.fn, space.params);
-                    onProgress(80, 'جاري استلام الفيديو...');
-                    const videoUrl = extractVideoUrl(result);
-                    if (videoUrl) {
-                        onProgress(100, 'اكتمل التوليد');
-                        return videoUrl;
-                    }
-                } catch (err) {
-                    console.warn(`Space ${space.name} failed:`, err);
-                    onProgress(20, 'فشل المساحة ' + space.name + '، تجربة بديلة...');
-                    continue;
-                }
-            }
-            throw new Error('تعذر الاتصال بأي خادم توليد فيديو مجاني');
-        }
-
-        async function generateImageToVideo(imageFile, prompt, duration, onProgress) {
-            const spaces = [
-                { name: "fffiloni/LTX-Video", fn: "/predict", params: { image: imageFile, prompt: prompt, negative_prompt: "", duration: duration, guidance_scale: 3.0, seed: 0 } },
-                { name: "Kedreamix/LTX-Video", fn: "/predict", params: { image: imageFile, prompt: prompt, negative_prompt: "", num_frames: duration * 16, seed: 0 } }
-            ];
-
-            for (const space of spaces) {
-                try {
-                    onProgress(10, 'جاري الاتصال بالمساحة ' + space.name + '...');
-                    const options = hfToken ? { hf_token: hfToken } : {};
-                    const client = await Client.connect(space.name, options);
-                    onProgress(30, 'تم الاتصال، جاري الإرسال...');
-                    const result = await client.predict(space.fn, space.params);
-                    onProgress(80, 'جاري استلام الفيديو...');
-                    const videoUrl = extractVideoUrl(result);
-                    if (videoUrl) {
-                        onProgress(100, 'اكتمل التوليد');
-                        return videoUrl;
-                    }
-                } catch (err) {
-                    console.warn(`Space ${space.name} failed:`, err);
-                    onProgress(20, 'فشل المساحة ' + space.name + '، تجربة بديلة...');
-                    continue;
-                }
-            }
-            throw new Error('تعذر الاتصال بأي خادم توليد فيديو من صورة مجاني');
-        }
-
-        function extractVideoUrl(result) {
-            if (!result) return null;
-            if (typeof result === 'string') return result;
-            if (Array.isArray(result.data) && result.data.length > 0) {
-                const first = result.data[0];
-                if (typeof first === 'string') return first;
-                if (first && first.url) return first.url;
-                if (first && first.path) return first.path;
-                if (first && first.video && first.video.url) return first.video.url;
-                if (first && first.output && first.output.url) return first.output.url;
-            }
-            if (result.url) return result.url;
-            if (result.path) return result.path;
-            return null;
-        }
-
-        // التهيئة
-        setupDropZone(firstFrameDropZone, firstFrameInput, firstFramePreviewContainer, firstFramePlaceholder, firstFramePreview, removeFirstBtn, 'first');
-        setupDropZone(lastFrameDropZone, lastFrameInput, lastFramePreviewContainer, lastFramePlaceholder, lastFramePreview, removeLastBtn, 'last');
-        setDuration(5);
-        showToast('التطبيق جاهز، بدون مفاتيح API');
-    </script>
+      video.src = videoUrl;
+      downloadBtn.href = videoUrl;
+      container.classList.remove('hidden');
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
